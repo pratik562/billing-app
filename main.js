@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const nodemailer = require("nodemailer");
 const isDev = require("electron-is-dev");
+const { pathToFileURL } = require("url");
 
 let mainWindow;
 
@@ -10,8 +11,6 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
-    // icon: path.join(__dirname, "assets/icons/app-icon.png"),
-    // icon: path.join(__dirname, "assets/icons/app-icon.icns"),
     icon: path.join(__dirname, "assets/icons/app-icon.ico"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -19,18 +18,15 @@ const createWindow = () => {
       nodeIntegration: false,
     },
   });
-  mainWindow.webContents.openDevTools(); 
 
-  // mainWindow.loadURL("http://localhost:5173"); 
+  const indexPath = isDev
+  ? "http://localhost:5173"
+  : `file://${path.join(__dirname, "render", "dist", "index.html")}`;
 
-  mainWindow.loadURL(
-    isDev
-      ? "http://localhost:5173"
-      : `file://${path.join(__dirname, "render/dist/index.html")}`
-  );
+  mainWindow.loadURL(indexPath);
+  mainWindow.webContents.openDevTools(); // optional for prod
 };
 
-// 🔁 App Lifecycle
 app.whenReady().then(createWindow);
 
 app.on("window-all-closed", () => {
@@ -64,7 +60,7 @@ ipcMain.handle("check-file", async (_, filepath) => {
   return fs.existsSync(filepath);
 });
 
-// 🔑 Send Email with Optional Attachment
+// ✉️ Send Email
 ipcMain.handle("send-email", async (_, data) => {
   const { to, subject, body } = data;
 
@@ -73,7 +69,7 @@ ipcMain.handle("send-email", async (_, data) => {
       service: "gmail",
       auth: {
         user: "pratikvaghasiya562@gmail.com",
-        pass: "xkev taxh feqs bkrd", // ✅ App Password
+        pass: "xkev taxh feqs bkrd",
       },
     });
 
@@ -88,7 +84,7 @@ ipcMain.handle("send-email", async (_, data) => {
     console.log("✅ Email sent:", info.response);
     return { success: true };
   } catch (error) {
-    console.error("❌ Email Error:", error); // Log full error
+    console.error("❌ Email Error:", error);
     return { success: false, error: error.message };
   }
 });

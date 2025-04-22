@@ -361,25 +361,25 @@ const emailBody = `
       {/* Total Summary */}
       <div className="total-summary">
         <p>
-          <strong>CGST:</strong> ₹${invoice.cgst_amount?.toFixed(2)}
+          <strong>CGST:</strong> ₹{invoice.cgst_amount?.toFixed(2)}
         </p>
         <p>
-          <strong>SGST:</strong> ₹${invoice.sgst_amount?.toFixed(2)}
+          <strong>SGST:</strong> ₹{invoice.sgst_amount?.toFixed(2)}
         </p>
         <p>
-          <strong>IGST:</strong> ₹${invoice.igst_amount?.toFixed(2)}
+          <strong>IGST:</strong> ₹{invoice.igst_amount?.toFixed(2)}
         </p>
         <p>
-          <strong>GST Total:</strong> ₹${invoice.gst_amount?.toFixed(2)}
+          <strong>GST Total:</strong> ₹{invoice.gst_amount?.toFixed(2)}
         </p>
         <p>
-          <strong>Total Amount:</strong> ₹${invoice.total_amount?.toFixed(2)}
+          <strong>Total Amount:</strong> ₹{invoice.total_amount?.toFixed(2)}
         </p>
         <p>
-          <strong>Paid Amount:</strong> ₹${invoice.paid_amount?.toFixed(2)}
+          <strong>Paid Amount:</strong> ₹{invoice.paid_amount?.toFixed(2)}
         </p>
         <p>
-          <strong>Due Amount:</strong> ₹${updatedDueAmount?.toFixed(2)}
+          <strong>Due Amount:</strong> ₹{updatedDueAmount?.toFixed(2)}
         </p>
       </div>
 

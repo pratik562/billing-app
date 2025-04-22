@@ -1,0 +1,31 @@
+{
+  "name": "shopper-bill-book",
+  "version": "1.0.0",
+  "description": "Cross-platform billing app",
+  "main": "main.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix render\" \"wait-on http://localhost:5173 && electron .\"",
+    "build": "npm run build --prefix render",
+    "start": "electron .",
+    "package-mac": "electron-packager . ShopperBillBook --overwrite --platform=darwin --arch=universal --out=release-build --icon=assets/icons/app-icon.icns --prune=true --ignore=\"node_modules/@esbuild\"",
+    "package-win": "electron-packager . ShopperBillBook --overwrite --platform=win32 --arch=x64 --icon=assets/icons/app-icon.ico --out=release-build --prune=true"
+  },
+  "keywords": [
+    "electron",
+    "billing",
+    "react",
+    "vite"
+  ],
+  "author": "Pratik Vaghasiya",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "electron": "^29.0.0",
+    "electron-is-dev": "^2.0.0",
+    "electron-packager": "^17.1.1",
+    "wait-on": "^7.0.1"
+  },
+  "dependencies": {
+    "nodemailer": "^6.10.1"
+  }
+}

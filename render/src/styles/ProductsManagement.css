@@ -1,0 +1,75 @@
+.products-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.no-products {
+  text-align: center;
+  color: #888;
+  font-size: 16px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* ✅ Styled Table */
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.styled-table th, .styled-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+/* ✅ Add Button */
+.btn-add {
+  background: #0077b6;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-add:hover {
+  background: #005c99;
+}
+
+/* ✅ Delete Button */
+.btn-delete {
+  background: #ff4d4d;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-delete:hover {
+  background: #c40000;
+}

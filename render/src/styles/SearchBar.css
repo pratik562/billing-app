@@ -1,0 +1,36 @@
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background: white; /* ✅ Ensures light background */
+  width: 100%;
+}
+
+.search-input {
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding: 6px;
+  background: transparent; /* ✅ Removes black background */
+  color: #222; /* ✅ Dark text for better readability */
+}
+
+/* ✅ Ensure Icons Are Visible */
+.search-icon {
+  font-size: 18px;
+  color: #0077b6; /* ✅ Blue for better contrast */
+}
+
+.clear-icon {
+  font-size: 18px;
+  color: #ff4d4d; /* ✅ Red for visibility */
+  cursor: pointer;
+}
+
+.clear-icon:hover {
+  color: #c40000;
+}

@@ -1,0 +1,120 @@
+/* ✅ Centering the Loader */
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* ✅ Full screen height */
+}
+
+/* ✅ Dashboard Container */
+.dashboard-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ✅ Content Layout */
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ✅ Refresh Button */
+.refresh-btn {
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #0077b6;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.refresh-btn:hover {
+  background: #005c99;
+}
+
+/* ✅ Search Bar Adjustments */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: white;
+  width: 100%;
+}
+
+.search-input {
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  padding: 4px;
+  background: transparent;
+  color: #222;
+}
+
+/* ✅ Summary Grid */
+.summary-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.summary-card {
+  flex: 1;
+  padding: 14px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.monthly {
+  background: #C8E6C9;
+  color: #388E3C;
+}
+
+.yearly {
+  background: #BBDEFB;
+  color: #1565C0;
+}
+
+/* ✅ Table Styling */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.styled-table th {
+  background: #f1f1f1;
+  color: #222;
+}
+
+.styled-table tbody tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.styled-table tbody tr:hover {
+  background: #eaeaea;
+}
+
+.no-data {
+  text-align: center;
+  padding: 16px;
+  color: #666;
+}

@@ -1,0 +1,306 @@
+/* ✅ Bill Container */
+.bill-container {
+    background: white;
+    padding: 20px;
+    width: 100%;
+    max-width: 100%; /* Make sure it doesn't overflow */
+    box-sizing: border-box; /* Include padding in width calculation */
+    margin: auto;
+    border: 2px solid black;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    font-family: "Courier New", monospace;
+}
+
+
+/* ✅ Invoice Info */
+.invoice-info {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid black;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+}
+
+.customer-box,
+.invoice-box {
+    width: 48%;
+    font-size: 14px;
+}
+
+/* ✅ Items Container */
+.items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* ✅ Row-style Layout for Items */
+.item-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 6px;
+    background: #f8f9fa;
+    border: 1px solid black;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* ✅ Individual Columns */
+.item-name,
+.item-category,
+.item-price,
+.item-qty,
+.item-gst,
+.item-total {
+    flex: 1;
+    text-align: center;
+}
+
+/* ✅ Alternate Row Colors for Readability */
+.item-row:nth-child(even) {
+    background: #e6e6e6;
+}
+
+/* ✅ Total Summary */
+.total-summary {
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 2px solid black;
+    font-size: 14px;
+}
+
+.total-summary p {
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+/* ✅ Input Field */
+.label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.input {
+    width: 100%;
+    padding: 6px;
+    margin-top: 4px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+/* ✅ Due Amount Input */
+.due-payment-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.due-input {
+    padding: 8px;
+    border-radius: 6px;
+    border: 2px solid #ccc;
+    font-size: 16px;
+    width: 100%;
+}
+
+.due-input:focus {
+    border-color: #0077b6;
+    box-shadow: 0px 4px 8px rgba(0, 119, 182, 0.2);
+}
+
+/* ✅ Action Buttons */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    min-width: 140px;
+    height: 40px;
+}
+
+/* ✅ Different Button Colors */
+.update {
+    background: #0077b6;
+    color: white;
+}
+
+.print {
+    background: #4CAF50;
+    color: white;
+}
+
+.email {
+    background: #FF9800;
+    color: white;
+}
+
+.save {
+    background: #8B5CF6;
+    color: white;
+}
+
+/* ✅ Mobile Responsiveness */
+@media (max-width: 600px) {
+    .actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .invoice-info {
+        flex-direction: column;
+    }
+
+    .customer-box,
+    .invoice-box {
+        width: 100%;
+    }
+}
+
+/* ✅ Printing Styles (A4 Size) */
+@page {
+    size: A4;
+    margin: 10mm;
+}
+
+@media print {
+    .bill-container {
+        width: 100%;
+        max-width: 100%; /* Ensure it doesn't exceed the page width */
+        page-break-after: always;
+        box-sizing: border-box; /* Include padding in width */
+    }
+
+    .bill-header h2 {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+
+    .items-container {
+        page-break-inside: auto;
+    }
+
+    .total-summary p {
+        margin-top: 5px;
+    }
+
+    /* Ensure content doesn't overflow */
+    body {
+        margin: 0;
+    }
+
+    .item-row {
+        page-break-inside: avoid;
+    }
+
+    .items-container {
+        margin-top: 0;
+    }
+
+    /* Avoid any extra margins or padding pushing content outside */
+    html, body {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+/* ✅ Signature / Stamp Section */
+.signature-stamp {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px; /* Adjust the margin to give enough space */
+}
+
+.signature-box,
+.stamp-box {
+    width: 45%;
+    height: 60px; /* Adjust height as needed */
+    border: 2px solid #000;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.signature-box {
+    border-style: dashed;
+}
+
+.stamp-box {
+    border-style: solid;
+}
+
+/* ✅ Printing Styles Adjustments */
+@media print {
+    .signature-stamp {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+
+    .signature-box,
+    .stamp-box {
+        width: 45%;
+        height: 60px;
+        border: 2px solid #000;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .signature-box {
+        border-style: dashed;
+    }
+
+    .stamp-box {
+        border-style: solid;
+    }
+}
+
+
+.shop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  background: #f4f4f4;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+.shop-info, .bank-info, .qr-code {
+  flex: 1;
+  margin: 0 10px;
+}
+.shop-info h2 {
+  margin-bottom: 5px;
+  color: #222;
+}
+.slogan {
+  font-style: italic;
+  color: #777;
+}

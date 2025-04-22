@@ -1,0 +1,132 @@
+/* 🟢 Billing Container - Light Background, Dark Text */
+.billing-container {
+  margin: 10px; /* Adjusted margin for better spacing */
+  padding: 20px; /* Keeps the structure clean */
+  background: #fff; /* Ensures a light, neutral background */
+  color: #222; /* Dark text for readability */
+}
+
+/* 🟢 Title & Description */
+.billing-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  color: #1c1c1c; /* ✅ Darker font */
+}
+
+.billing-description {
+  text-align: center;
+  color: #444; /* ✅ Slightly darker for readability */
+  margin-bottom: 20px;
+}
+
+/* 🟢 Action Buttons */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+}
+
+/* ✅ Add Bill Button */
+.add-bill {
+  background: #4CAF50;
+  color: white;
+}
+
+.add-bill:hover {
+  background: #388E3C;
+}
+
+/* ✅ Export CSV Button */
+.export-csv {
+  background: #FF9800;
+  color: white;
+}
+
+.export-csv:hover {
+  background: #F57C00;
+}
+
+/* 🟢 Filter Inputs - Light Background, Dark Text */
+.filter-dropdown,
+.filter-input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid #777;
+  font-size: 16px;
+  background: #fff;
+  color: #222; /* ✅ Dark text */
+  transition: all 0.3s ease-in-out;
+}
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* ✅ Adds space between the search icon, dropdown, and button */
+}
+
+
+/* ✅ Ensure Calendar Icon is Dark */
+.date-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calendar-icon {
+  font-size: 18px;
+  color: #222; /* ✅ Dark icon */
+}
+
+/* ✅ Hover & Focus Effects */
+.filter-dropdown:hover,
+.filter-input:hover {
+  border-color: #0056b3;
+}
+
+.filter-dropdown:focus,
+.filter-input:focus {
+  border-color: #0077b6;
+  box-shadow: 0px 4px 12px rgba(0, 119, 182, 0.25);
+  outline: none;
+}
+
+/* 🟢 Stylish Table */
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: #fff;
+  color: #222; /* ✅ Dark text */
+}
+
+/* ✅ Table Header */
+.styled-table th {
+  background: #f1f1f1;
+  color: #222;
+  padding: 12px;
+}
+
+/* ✅ Table Data */
+.styled-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ccc;
+}
+
+/* ✅ Alternating Row Colors */
+.styled-table tbody tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.styled-table tbody tr:hover {
+  background: #eaeaea;
+}

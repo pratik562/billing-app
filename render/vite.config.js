@@ -1,17 +1,18 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+/* eslint-disable no-undef */
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 import tailwindcss from "@tailwindcss/vite";
 import path from 'path'; // Import path module
 
-// https://vite.dev/config/
 export default defineConfig({
-  base: './',
+  base: process.env.VITE_PUBLIC_URL || "./",
   plugins: [react(), tailwindcss()],
   build: {
+    assetsDir: "assets", 
+    emptyOutDir: true,
+    cssCodeSplit: true, 
     rollupOptions: {
-      input: {
-        main: path.resolve(__dirname, 'index.html') // Now path is correctly used
-      }
+      input: path.resolve(__dirname, 'index.html')
     }
   }
 });

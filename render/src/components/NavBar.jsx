@@ -2,13 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Navbar.css";
 import { FaHome, FaList, FaPlus, FaChartBar } from "react-icons/fa";
+import logo from "../../public/src/assets/logo.png";
+
+<img src={logo} alt="Logo" className="logo-img" />
+
 
 const Navbar = () => {
   return (
     <nav className="navbar">
       {/* ✅ Logo with subtle animation */}
       <div className="logo flex-row justify-center">
-      <img src="/logo.png" alt="Logo" className="logo-img" />
+<img src={logo} alt="Logo" className="logo-img" />
+
         <span>Neet Trailer</span>
       </div>
 

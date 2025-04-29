@@ -12,24 +12,24 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
-    icon: path.join(__dirname, "assets/icons/app-icon.ico"),
+    icon: path.resolve(__dirname, "assets/icons/app-icon.ico"),
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.resolve(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
     },
   });
 
+  // ✅ Updated path resolution for production
   const indexPath = isDev
-  ? "http://localhost:5173"
-  : `file://${path.join(__dirname, "render", "dist", "index.html")}`;
+    ? "http://localhost:5173"
+    : mainWindow.loadURL(`file://${path.resolve(__dirname, "render", "dist", "index.html")}`);
+    ;
 
-  mainWindow.loadURL(indexPath);
-  // if (isDev) {
-  //   mainWindow.webContents.openDevTools();
-  // } else {
-  //   mainWindow.webContents.openDevTools();
-  // }
+  console.log("Loading URL:", indexPath); // 🔍 Debugging log
+  // mainWindow.loadURL(indexPath);
+  mainWindow.loadURL(`file://${path.resolve(__dirname, "render", "dist", "index.html")}`);
+  mainWindow.webContents.openDevTools();
 };
 
 app.whenReady().then(createWindow);

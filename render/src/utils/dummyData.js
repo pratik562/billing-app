@@ -1,3 +1,5 @@
+import qr from "../../public/src/assets/qr.png"
+
 export const data = {
   name: "Opulo Traders",
   slogan: "Quality You Can Trust",
@@ -9,5 +11,5 @@ export const data = {
     ifsc: "HDFC0001234",
     branch: "Surat Main Branch",
   },
-  qrCodeUrl: "/qr.png", // Place an image in public folder
+  qrCodeUrl: qr, // Place an image in public folder
 };

@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix render\" \"wait-on http://localhost:5173 && electron .\"",
     "build": "npm run build --prefix render",
+    "release": "npm run build && npm run package-win",
     "start": "electron .",
     "package-mac": "electron-packager . ShopperBillBook --overwrite --platform=darwin --arch=universal --out=release-build --icon=assets/icons/app-icon.icns --prune=true --ignore=\"node_modules/@esbuild\"",
-    "package-win": "electron-packager . ShopperBillBook --overwrite --platform=win32 --arch=x64 --icon=assets/icons/app-icon.ico --out=release-build --prune=true"
+    "package-win": "npx electron-packager . ShopperBillBook --overwrite --platform=win32 --arch=x64 --icon=assets/icons/app-icon.ico --out=release-build --prune=true"
   },
   "keywords": [
     "electron",

@@ -18,6 +18,7 @@ import "../styles/ProductsManagement.css";
 
 const ProductsManagement = () => {
   const [products, setProducts] = useState([]);
+
   const [formData, setFormData] = useState({
     name: "",
     price: "",

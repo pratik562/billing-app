@@ -15,6 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { isAfter } from "date-fns";
 import "../styles/BillingList.css";
 import { triggerToast } from "../utils/toast";
+import Loader from "../components/Loader";
 
 const formatCustomDate = (timestamp) => {
   try {
@@ -34,6 +35,7 @@ const BillingList = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [filterType, setFilterType] = useState("all");
   const [fromDate, setFromDate] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [toDate, setToDate] = useState(null);
   const today = new Date();
 
@@ -41,6 +43,7 @@ const BillingList = () => {
     const fetchInvoices = async () => {
       try {
         const data = await getAllInvoices();
+        setLoading(false)
         setInvoices(data);
         setFilteredData(data);
       } catch (error) {
@@ -62,11 +65,11 @@ const BillingList = () => {
   const handleFilterChange = () => {
     if (filterType === "range") {
       if (!fromDate || !toDate) {
-        triggerToast("Please select both start and end dates.","error");
+        triggerToast("Please select both start and end dates.", "error");
         return;
       }
       if (isAfter(fromDate, today) || isAfter(toDate, today)) {
-         triggerToast("Date cannot be in the future.", "error");
+        triggerToast("Date cannot be in the future.", "error");
         return;
       }
 
@@ -129,95 +132,102 @@ const BillingList = () => {
     <div className="billing-container">
       <h2 className="billing-title">📜 Billing List</h2>
       <p className="billing-description">View and manage all your invoices.</p>
+      {loading ? (
+        <div className="loader-container">
+          <Loader />
+        </div>
+      ) : (
+        <div>
+          <div className="actions">
+            <Link to="/add-bill" className="action-btn add-bill">
+              <FaPlusCircle /> Add New Bill
+            </Link>
 
-      <div className="actions">
-        <Link to="/add-bill" className="action-btn add-bill">
-          <FaPlusCircle /> Add New Bill
-        </Link>
+            <div className="filter-container">
+              <div>
+                <FaSearch className="filter-icon" />
+              </div>
 
-        <div className="filter-container">
-          <div>
-            <FaSearch className="filter-icon" />
+              <select
+                value={filterType}
+                onChange={(e) => setFilterType(e.target.value)}
+                className="filter-dropdown"
+              >
+                <option value="all">All</option>
+                <option value="range">Custom Range</option>
+              </select>
+
+              {filterType === "range" && (
+                <>
+                  <div className="date-filter">
+                    <FaCalendarAlt className="calendar-icon" />
+                    <DatePicker
+                      selected={fromDate}
+                      onChange={(date) => setFromDate(date)}
+                      maxDate={today}
+                      placeholderText="From Date"
+                      className="filter-input"
+                    />
+                  </div>
+                  <div className="date-filter">
+                    <FaCalendarAlt className="calendar-icon" />
+                    <DatePicker
+                      selected={toDate}
+                      onChange={(date) => setToDate(date)}
+                      minDate={fromDate}
+                      maxDate={today}
+                      placeholderText="To Date"
+                      className="filter-input"
+                    />
+                  </div>
+                </>
+              )}
+
+              <button onClick={handleFilterChange} className="filter-btn">
+                Apply
+              </button>
+            </div>
+
+            <CSVLink
+              data={formattedCSVData}
+              headers={headers}
+              filename="billing_list.csv"
+              className="action-btn export-csv"
+            >
+              <FaFileExport /> Export CSV
+            </CSVLink>
+
+            <button onClick={handleDeleteAll} className="action-btn delete-all">
+              <FaTrash /> Delete All Data
+            </button>
           </div>
 
-          <select
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            className="filter-dropdown"
-          >
-            <option value="all">All</option>
-            <option value="range">Custom Range</option>
-          </select>
-
-          {filterType === "range" && (
-            <>
-              <div className="date-filter">
-                <FaCalendarAlt className="calendar-icon" />
-                <DatePicker
-                  selected={fromDate}
-                  onChange={(date) => setFromDate(date)}
-                  maxDate={today}
-                  placeholderText="From Date"
-                  className="filter-input"
+          <table className="styled-table">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Invoice ID</th>
+                <th>Date</th>
+                <th>Paid Amount</th>
+                <th>Due Amount</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData.map((invoice) => (
+                <InvoiceRow
+                  key={invoice.invoice_id}
+                  invoice={invoice}
+                  onDelete={handleDelete}
                 />
-              </div>
-              <div className="date-filter">
-                <FaCalendarAlt className="calendar-icon" />
-                <DatePicker
-                  selected={toDate}
-                  onChange={(date) => setToDate(date)}
-                  minDate={fromDate}
-                  maxDate={today}
-                  placeholderText="To Date"
-                  className="filter-input"
-                />
-              </div>
-            </>
-          )}
-
-          <button onClick={handleFilterChange} className="filter-btn">
-            Apply
-          </button>
+              ))}
+            </tbody>
+          </table>
         </div>
-
-        <CSVLink
-          data={formattedCSVData}
-          headers={headers}
-          filename="billing_list.csv"
-          className="action-btn export-csv"
-        >
-          <FaFileExport /> Export CSV
-        </CSVLink>
-
-        <button onClick={handleDeleteAll} className="action-btn delete-all">
-          <FaTrash /> Delete All Data
-        </button>
-      </div>
-
-      <table className="styled-table">
-        <thead>
-          <tr>
-            <th>Customer</th>
-            <th>Phone</th>
-            <th>Invoice ID</th>
-            <th>Date</th>
-            <th>Paid Amount</th>
-            <th>Due Amount</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.map((invoice) => (
-            <InvoiceRow
-              key={invoice.invoice_id}
-              invoice={invoice}
-              onDelete={handleDelete}
-            />
-          ))}
-        </tbody>
-      </table>
+      )}
     </div>
   );
 };

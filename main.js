@@ -3,7 +3,8 @@ const path = require("path");
 const fs = require("fs");
 const nodemailer = require("nodemailer");
 const isDev = require("electron-is-dev");
-const { pathToFileURL } = require("url");
+require("dotenv").config();
+const { EMAIL_USER, EMAIL_PASS } = process.env;
 
 let mainWindow;
 
@@ -24,7 +25,11 @@ const createWindow = () => {
   : `file://${path.join(__dirname, "render", "dist", "index.html")}`;
 
   mainWindow.loadURL(indexPath);
-  mainWindow.webContents.openDevTools(); // optional for prod
+  // if (isDev) {
+  //   mainWindow.webContents.openDevTools();
+  // } else {
+  //   mainWindow.webContents.openDevTools();
+  // }
 };
 
 app.whenReady().then(createWindow);
@@ -68,8 +73,8 @@ ipcMain.handle("send-email", async (_, data) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "pratikvaghasiya562@gmail.com",
-        pass: "xkev taxh feqs bkrd",
+        user: EMAIL_USER,
+        pass: EMAIL_PASS,
       },
     });
 

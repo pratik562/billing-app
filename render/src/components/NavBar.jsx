@@ -8,7 +8,7 @@ const Navbar = () => {
     <nav className="navbar">
       {/* ✅ Logo with subtle animation */}
       <div className="logo flex-row justify-center">
-        <img src="/logo.png" alt="Logo" className="logo-img" />
+      <img src="/logo.png" alt="Logo" className="logo-img" />
         <span>Neet Trailer</span>
       </div>
 

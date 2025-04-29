@@ -20,12 +20,14 @@ import {
 } from "react-icons/fa";
 import "../styles/AddBill.css";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
 
 const gstRates = [0, 2.5, 5, 9, 14, 18];
 
 const AddBill = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [invoice, setInvoice] = useState({
     customer_name: "",
     customer_phone: "",
@@ -46,6 +48,7 @@ const AddBill = () => {
 
   useEffect(() => {
     const fetchLatestInvoiceID = async () => {
+      
       const invoices = await getAllInvoices();
       const currentYear = new Date().getFullYear();
 
@@ -198,10 +201,13 @@ const AddBill = () => {
   };
 
   const handleAddInvoice = async () => {
+    setLoading(true)
     if (!validateForm()) return;
 
     try {
+      setLoading(true)
       await addInvoice(invoice);
+      setLoading(false)
       triggerToast("Invoice added successfully!", "success");
       setTimeout(() => {
         navigate("/");
@@ -214,199 +220,207 @@ const AddBill = () => {
 
   return (
     <div className="dashboard-container">
-      <main className="main-content">
-        <h2 className="dashboard-title">Add New Bill</h2>
 
-        <div className="card">
-          <h3>Customer Information</h3>
-          <Input
-            label="Customer Name"
-            value={invoice.customer_name}
-            onChange={(e) => handleInputChange("customer_name", e.target.value)}
-            icon={FaUser}
-          />
-          <Input
-            label="Phone"
-            value={invoice.customer_phone}
-            onChange={(e) =>
-              handleInputChange("customer_phone", e.target.value)
-            }
-            icon={FaPhone}
-          />
-          <Input
-            label="Email"
-            type="email"
-            value={invoice.customer_email}
-            onChange={(e) =>
-              handleInputChange("customer_email", e.target.value)
-            }
-            icon={FaEnvelope}
-          />
-          <Input
-            label="Address"
-            value={invoice.customer_address}
-            onChange={(e) =>
-              handleInputChange("customer_address", e.target.value)
-            }
-            icon={FaHome}
-          />
-        </div>
-
-        <div className="card items-card">
-          <h3 className="card-title">🛒 Invoice Items</h3>
-
-          {invoice.items.map((item, index) => (
-            <div key={index} className="item-block">
-              {/* Product Dropdown */}
-              <div className="input-group">
-                <label>Select Product</label>
-                <select
-                  className="styled-select"
-                  value={item.name}
-                  onChange={(e) =>
-                    handleProductSelection(
-                      index,
-                      products.find((p) => p.name === e.target.value)
-                    )
-                  }
-                >
-                  <option value="">Select Product</option>
-                  {products.map((product) => (
-                    <option key={product.name} value={product.name}>
-                      {product.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Units & Price */}
-              <div className="input-row">
-                <div className="input-group">
-                  <label>Units</label>
-                  <input
-                    type="number"
-                    className="styled-input"
-                    value={item.unit}
-                    onChange={(e) => updateItem(index, "unit", e.target.value)}
-                  />
-                </div>
-                <div className="input-group">
-                  <label>Price</label>
-                  <input
-                    type="number"
-                    className="styled-input"
-                    value={item.price}
-                    onChange={(e) => updateItem(index, "price", e.target.value)}
-                  />
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="input-group full">
-                <label>Description</label>
-                <input
-                  className="styled-input"
-                  value={item.description}
-                  onChange={(e) =>
-                    updateItem(index, "description", e.target.value)
-                  }
-                />
-              </div>
-
-              {/* GST Dropdowns */}
-              <div className="input-row">
-                <div className="input-group">
-                  <label>CGST</label>
-                  <select
-                    className="gst-select cgst"
-                    value={item.cgst_rate}
-                    onChange={(e) =>
-                      updateItem(index, "cgst_rate", parseFloat(e.target.value))
-                    }
-                  >
-                    {gstRates.map((rate) => (
-                      <option key={rate} value={rate}>
-                        CGST {rate}%
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="input-group">
-                  <label>SGST</label>
-                  <select
-                    className="gst-select sgst"
-                    value={item.sgst_rate}
-                    onChange={(e) =>
-                      updateItem(index, "sgst_rate", parseFloat(e.target.value))
-                    }
-                  >
-                    {gstRates.map((rate) => (
-                      <option key={rate} value={rate}>
-                        SGST {rate}%
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="input-group">
-                  <label>IGST</label>
-                  <select
-                    className="gst-select igst"
-                    value={item.igst_rate}
-                    onChange={(e) =>
-                      updateItem(index, "igst_rate", parseFloat(e.target.value))
-                    }
-                  >
-                    {gstRates.map((rate) => (
-                      <option key={rate} value={rate}>
-                        IGST {rate}%
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Remove Button */}
-              <div className="btn-remove">
-                <Button
-                  onClick={() => removeItem(index)}
-                  icon={FaTrash}
-                  variant="danger"
-                />
-              </div>
+          {loading ? (
+            <div className="loader-container">
+              <Loader /> 
             </div>
-          ))}
-
-          <Button onClick={addNewItem} variant="secondary" icon={FaPlus}>
-            Add Item
-          </Button>
-        </div>
-
-        <div className="card">
-          <h3>Invoice Total</h3>
-          <Input
-            label="Total Amount"
-            type="number"
-            value={invoice.total_amount.toFixed(2)}
-            readOnly
-          />
-          <Input
-            label="Paid Amount"
-            type="number"
-            value={invoice.paid_amount}
-            onChange={(e) => handleInputChange("paid_amount", e.target.value)}
-          />
-          <Input
-            label="Due Amount"
-            type="number"
-            value={invoice.due_amount.toFixed(2)}
-            readOnly
-          />
-        </div>
-
-        <Button onClick={handleAddInvoice} variant="primary">
-          Add Invoice
-        </Button>
-      </main>
+          ) :(
+            <main className="main-content">
+            <h2 className="dashboard-title">Add New Bill</h2>
+    
+            <div className="card">
+              <h3>Customer Information</h3>
+              <Input
+                label="Customer Name"
+                value={invoice.customer_name}
+                onChange={(e) => handleInputChange("customer_name", e.target.value)}
+                icon={FaUser}
+              />
+              <Input
+                label="Phone"
+                value={invoice.customer_phone}
+                onChange={(e) =>
+                  handleInputChange("customer_phone", e.target.value)
+                }
+                icon={FaPhone}
+              />
+              <Input
+                label="Email"
+                type="email"
+                value={invoice.customer_email}
+                onChange={(e) =>
+                  handleInputChange("customer_email", e.target.value)
+                }
+                icon={FaEnvelope}
+              />
+              <Input
+                label="Address"
+                value={invoice.customer_address}
+                onChange={(e) =>
+                  handleInputChange("customer_address", e.target.value)
+                }
+                icon={FaHome}
+              />
+            </div>
+    
+            <div className="card items-card">
+              <h3 className="card-title">🛒 Invoice Items</h3>
+    
+              {invoice.items.map((item, index) => (
+                <div key={index} className="item-block">
+                  {/* Product Dropdown */}
+                  <div className="input-group">
+                    <label>Select Product</label>
+                    <select
+                      className="styled-select"
+                      value={item.name}
+                      onChange={(e) =>
+                        handleProductSelection(
+                          index,
+                          products.find((p) => p.name === e.target.value)
+                        )
+                      }
+                    >
+                      <option value="">Select Product</option>
+                      {products.map((product) => (
+                        <option key={product.name} value={product.name}>
+                          {product.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+    
+                  {/* Units & Price */}
+                  <div className="input-row">
+                    <div className="input-group">
+                      <label>Units</label>
+                      <input
+                        type="number"
+                        className="styled-input"
+                        value={item.unit}
+                        onChange={(e) => updateItem(index, "unit", e.target.value)}
+                      />
+                    </div>
+                    <div className="input-group">
+                      <label>Price</label>
+                      <input
+                        type="number"
+                        className="styled-input"
+                        value={item.price}
+                        onChange={(e) => updateItem(index, "price", e.target.value)}
+                      />
+                    </div>
+                  </div>
+    
+                  {/* Description */}
+                  <div className="input-group full">
+                    <label>Description</label>
+                    <input
+                      className="styled-input"
+                      value={item.description}
+                      onChange={(e) =>
+                        updateItem(index, "description", e.target.value)
+                      }
+                    />
+                  </div>
+    
+                  {/* GST Dropdowns */}
+                  <div className="input-row">
+                    <div className="input-group">
+                      <label>CGST</label>
+                      <select
+                        className="gst-select cgst"
+                        value={item.cgst_rate}
+                        onChange={(e) =>
+                          updateItem(index, "cgst_rate", parseFloat(e.target.value))
+                        }
+                      >
+                        {gstRates.map((rate) => (
+                          <option key={rate} value={rate}>
+                            CGST {rate}%
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="input-group">
+                      <label>SGST</label>
+                      <select
+                        className="gst-select sgst"
+                        value={item.sgst_rate}
+                        onChange={(e) =>
+                          updateItem(index, "sgst_rate", parseFloat(e.target.value))
+                        }
+                      >
+                        {gstRates.map((rate) => (
+                          <option key={rate} value={rate}>
+                            SGST {rate}%
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="input-group">
+                      <label>IGST</label>
+                      <select
+                        className="gst-select igst"
+                        value={item.igst_rate}
+                        onChange={(e) =>
+                          updateItem(index, "igst_rate", parseFloat(e.target.value))
+                        }
+                      >
+                        {gstRates.map((rate) => (
+                          <option key={rate} value={rate}>
+                            IGST {rate}%
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+    
+                  {/* Remove Button */}
+                  <div className="btn-remove">
+                    <Button
+                      onClick={() => removeItem(index)}
+                      icon={FaTrash}
+                      variant="danger"
+                    />
+                  </div>
+                </div>
+              ))}
+    
+              <Button onClick={addNewItem} variant="secondary" icon={FaPlus}>
+                Add Item
+              </Button>
+            </div>
+    
+            <div className="card">
+              <h3>Invoice Total</h3>
+              <Input
+                label="Total Amount"
+                type="number"
+                value={invoice.total_amount.toFixed(2)}
+                readOnly
+              />
+              <Input
+                label="Paid Amount"
+                type="number"
+                value={invoice.paid_amount}
+                onChange={(e) => handleInputChange("paid_amount", e.target.value)}
+              />
+              <Input
+                label="Due Amount"
+                type="number"
+                value={invoice.due_amount.toFixed(2)}
+                readOnly
+              />
+            </div>
+    
+            <Button onClick={handleAddInvoice} variant="primary">
+              Add Invoice
+            </Button>
+          </main>
+          )}
+     
     </div>
   );
 };

@@ -251,10 +251,6 @@ const emailBody = `
   </body>
 </html>
 `;
-
-
-
-
     const response = await window.electronAPI.sendEmail({
       to: "pratikvaghasiya11318@gmail.com",
       subject: "📜 Your Invoice from Shopper Bill Book",

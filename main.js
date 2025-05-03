@@ -1,12 +1,21 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, globalShortcut } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const nodemailer = require("nodemailer");
 const isDev = require("electron-is-dev");
-require("dotenv").config();
-const { EMAIL_USER, EMAIL_PASS } = process.env;
+require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
 let mainWindow;
+
+// ✅ Setup logging
+const logFilePath = path.join(app.getPath("logs"), "app.log");
+const logToFile = (message) => {
+  fs.appendFileSync(logFilePath, `${new Date().toISOString()} - ${message}\n`);
+};
+
+// ✅ Log environment variables
+logToFile(`EMAIL_USER: ${process.env.EMAIL_USER || "❌ MISSING"}`);
+logToFile(`EMAIL_PASS: ${process.env.EMAIL_PASS ? "✅ Exists" : "❌ MISSING"}`);
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
@@ -20,16 +29,17 @@ const createWindow = () => {
     },
   });
 
-  // ✅ Updated path resolution for production
   const indexPath = isDev
     ? "http://localhost:5173"
-    : mainWindow.loadURL(`file://${path.resolve(__dirname, "render", "dist", "index.html")}`);
-    ;
+    : `file://${path.resolve(__dirname, "render", "dist", "index.html")}`;
+  mainWindow.loadURL(indexPath);
 
-  console.log("Loading URL:", indexPath); // 🔍 Debugging log
-  // mainWindow.loadURL(indexPath);
-  mainWindow.loadURL(`file://${path.resolve(__dirname, "render", "dist", "index.html")}`);
-  mainWindow.webContents.openDevTools();
+  // ✅ Open DevTools ONLY in development
+  if (isDev) mainWindow.webContents.openDevTools();
+
+
+  // mainWindow.loadURL(`file://${path.resolve(__dirname, "render", "dist", "index.html")}`);
+  // mainWindow.webContents.openDevTools();
 };
 
 app.whenReady().then(createWindow);
@@ -45,8 +55,7 @@ app.on("activate", () => {
 // 📂 Handle getting PDF path
 ipcMain.handle("get-pdf-path", async (_, filename) => {
   const documentsPath = app.getPath("documents");
-  const fullPath = path.join(documentsPath, filename);
-  return fullPath;
+  return path.join(documentsPath, filename);
 });
 
 // 💾 Save PDF to custom path
@@ -55,7 +64,7 @@ ipcMain.handle("save-pdf", async (_, filepath, uint8Array) => {
     await fs.promises.writeFile(filepath, Buffer.from(uint8Array));
     return true;
   } catch (err) {
-    console.error("Failed to save PDF:", err);
+    logToFile("❌ Failed to save PDF: " + err.message);
     return false;
   }
 });
@@ -65,31 +74,35 @@ ipcMain.handle("check-file", async (_, filepath) => {
   return fs.existsSync(filepath);
 });
 
-// ✉️ Send Email
+// ✉️ Send Email with Debugging
 ipcMain.handle("send-email", async (_, data) => {
-  const { to, subject, body } = data;
-
   try {
+    logToFile("🚀 Sending email to: " + data.to);
+
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      throw new Error("Missing EMAIL_USER or EMAIL_PASS in environment variables.");
+    }
+
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: EMAIL_USER,
-        pass: EMAIL_PASS,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
     const mailOptions = {
       from: '"Shopper Bill Book" <pratikvaghasiya562@gmail.com>',
-      to,
-      subject,
-      html: body,
+      to: data.to,
+      subject: data.subject,
+      html: data.body,
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log("✅ Email sent:", info.response);
+    logToFile("✅ Email sent successfully: " + info.response);
     return { success: true };
   } catch (error) {
-    console.error("❌ Email Error:", error);
+    logToFile("❌ Email Error: " + error.message);
     return { success: false, error: error.message };
   }
 });
